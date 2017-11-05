@@ -68,7 +68,7 @@ module TeamCowboy
         
         request_array = []
         request_hash.keys.sort.each do |key|
-          request_array.push "#{key}=#{URI.escape(request_hash[key].to_s.downcase)}"
+          request_array.push "#{key.downcase}=#{URI.escape(request_hash[key].to_s.downcase)}"
         end
         request_string = request_array.join('&')
         parts.push(request_string)
