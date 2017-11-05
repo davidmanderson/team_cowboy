@@ -1,55 +1,53 @@
 require 'faraday_middleware'
 require 'digest/sha1'
+require 'json'
 
 module TeamCowboy
     module Request
       
-      # Perform an HTTP GET request
-      def get(resource_path, params = {})
-        request = construct_request(resource_path, params)
+      def get(method, data, options = {})
+        params = build_params("GET", data.merge(method: method))
   
-        response = connection.get do |req|
-          req.url request[:url], request[:params]
-          req.options = request_options
+        response = connection(options).get do |req|
+          req.params = params
+          req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
+          req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new(response.body)
+        Hashie::Mash.new JSON.parse(response.body)
       end
       
-      def post(resource_path, params)
-        request = construct_request(resource_path, "POST", params)
+      def post(method, data, options = {})
+        params = build_params("POST", data.merge(method: method))
         
-        r = response = connection.post do |req|
-          req.url request[:url], request[:params]
-          #binding.pry
-          #req.params = request[:params]
-          req.body = request[:params]
+        response = connection(options).post do |req|
+          req.body = params
           req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
           req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
         
-        binding.pry
-        Hashie::Mash.new(response.body)
+        Hashie::Mash.new JSON.parse(response.body)
       end
       
-      def put(resource_path, data)
-        request = construct_request(resource_path)
+      def put(method, data, options = {})
+        params = build_params("PUT", data.merge(method: method))
   
         response = connection.put do |req|
-          req.url request[:url]
           req.body = data.to_json
-          req.options = request_options
+          req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
+          req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new(response.body)
+        Hashie::Mash.new JSON.parse(response.body)
       end
       
-      def delete(resource_path)
-        request = construct_request(resource_path)
+      def delete(method, data, options = {})
+        params = build_params("DELETE", data.merge(method: method))
   
         response = connection.delete do |req|
-          req.url request[:url]
-          req.options = request_options
+          req.params = params
+          req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
+          req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new(response.body)
+        Hashie::Mash.new JSON.parse(response.body)
       end
 
       def generate_sig(method:, timestamp:, nonce:, params:)
@@ -70,29 +68,27 @@ module TeamCowboy
         
         request_array = []
         request_hash.keys.sort.each do |key|
-          request_array.push "#{key}=#{request_hash[key]}"
+          request_array.push "#{key}=#{URI.escape(request_hash[key].to_s.downcase)}"
         end
         request_string = request_array.join('&')
         parts.push(request_string)
 
-        value = Digest::SHA1.hexdigest parts.join('|')
-        binding.pry
-        value
+        Digest::SHA1.hexdigest parts.join('|')
       end
 
       def generate_nonce
-        rand(10 ** 8)
+        rand(10 ** 9)
       end
 
       def generate_timestamp
         Time.now.getutc.to_i
       end
       
-      def construct_request(resource_path, method, params={})
+      def build_params(http_method, params={})
         timestamp = generate_timestamp
         nonce = generate_nonce
 
-        new_params = params.merge(
+        params.merge(
           nonce: nonce,
           timestamp: timestamp,
           method: params[:method],
@@ -100,25 +96,19 @@ module TeamCowboy
           sig: generate_sig(
             nonce: nonce,
             timestamp: timestamp,
-            method: method,
+            method: http_method,
             params: params
           )
         )
-        #binding.pry
-        request = {}
-        request[:url] = "#{Configuration::DEFAULT_ENDPOINT}/#{resource_path}"
-        request[:params] = new_params
-        request    
       end
   
-      def connection
-        options = {
+      def connection(options = {})
+        config = {
           :headers => {'Accept' => 'application/json', 'User-Agent' => user_agent},
-          :url => api_endpoint,
         }
+        config[:url] = options[:secure] ? "https://#{api_endpoint}" : "http://#{api_endpoint}"
         
-        Faraday.new(options) do |builder|
-          #builder.request  :json
+        Faraday.new(config) do |builder|
           builder.request :url_encoded
           builder.adapter(adapter)
         end

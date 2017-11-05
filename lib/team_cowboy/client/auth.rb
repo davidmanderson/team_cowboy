@@ -5,9 +5,12 @@ module TeamCowboy
         params = { 
           username: username,
           password: password,
-          method: "Auth_GetUserToken",
         }
-        post("", params).results
+        
+        result = post("Auth_GetUserToken", params, secure: true)
+        if result.success 
+          TeamCowboy.user_token = result.body.token
+        end
       end
             
     end

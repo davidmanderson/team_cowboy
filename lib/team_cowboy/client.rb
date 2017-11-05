@@ -34,5 +34,6 @@ module TeamCowboy
     
     include Request
     include Auth
+    include User
   end
 end

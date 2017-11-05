@@ -6,7 +6,7 @@ module TeamCowboy
   module Configuration
 
     # An array of valid keys in the options hash when configuring
-    VALID_OPTIONS_KEYS = [:adapter, :endpoint, :limit, :user_agent, :request_options].freeze
+    VALID_OPTIONS_KEYS = [:adapter, :endpoint, :limit, :user_agent, :request_options, :user_token].freeze
 
     # The adapter that will be used to connect if none is set
     #
@@ -14,7 +14,7 @@ module TeamCowboy
     DEFAULT_ADAPTER = Faraday.default_adapter
 
     # The endpoint that will be used to connect if none is set
-    DEFAULT_ENDPOINT = 'https://api.teamcowboy.com/v1'.freeze
+    DEFAULT_ENDPOINT = 'api.teamcowboy.com/v1/'.freeze
 
     # The user agent that will be sent to the API endpoint if none is set
     DEFAULT_USER_AGENT = "TeamCowboy Client Gem #{TeamCowboy::VERSION}".freeze
@@ -55,6 +55,7 @@ module TeamCowboy
       self.user_agent       = DEFAULT_USER_AGENT
       self.request_options  = DEFAULT_REQUEST_OPTIONS
       self.limit            = DEFAULT_LIMIT
+      self.user_token       = nil
     end
 
   end
