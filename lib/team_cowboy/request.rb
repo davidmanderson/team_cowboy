@@ -13,7 +13,7 @@ module TeamCowboy
           req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
           req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new JSON.parse(response.body)
+        handle_response response
       end
       
       def post(method, data, options = {})
@@ -24,8 +24,7 @@ module TeamCowboy
           req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
           req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        
-        Hashie::Mash.new JSON.parse(response.body)
+        handle_response response
       end
       
       def put(method, data, options = {})
@@ -36,7 +35,7 @@ module TeamCowboy
           req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
           req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new JSON.parse(response.body)
+        handle_response response
       end
       
       def delete(method, data, options = {})
@@ -47,7 +46,16 @@ module TeamCowboy
           req.options.timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:timeout]
           req.options.open_timeout = Configuration::DEFAULT_REQUEST_OPTIONS[:open_timeout]
         end
-        Hashie::Mash.new JSON.parse(response.body)
+        handle_response response
+      end
+
+      def handle_response(response)
+        begin 
+          result = Hashie::Mash.new JSON.parse(response.body)
+          result.success ? result.body : nil
+        rescue
+          nil
+        end
       end
 
       def generate_sig(method:, timestamp:, nonce:, params:)

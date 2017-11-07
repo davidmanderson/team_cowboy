@@ -35,5 +35,7 @@ module TeamCowboy
     include Request
     include Auth
     include User
+    include Team
+    include Event
   end
 end
