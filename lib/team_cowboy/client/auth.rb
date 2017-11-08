@@ -7,9 +7,7 @@ module TeamCowboy
           password: password,
         }
         
-        result = post("Auth_GetUserToken", params, secure: true)
-        TeamCowboy.user_token = result.token if result
-        result
+        post("Auth_GetUserToken", params, secure: true)
       end
             
     end

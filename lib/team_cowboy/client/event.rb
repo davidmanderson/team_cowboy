@@ -3,7 +3,7 @@ module TeamCowboy
     
     def event(team_id:, event_id:, include_rsvp_info: nil)
       params = { 
-        userToken:        TeamCowboy.user_token,
+        userToken:        self.user_token,
         teamId:           team_id,
         eventId:          event_id,
         includeRSVPInfo:  include_rsvp_info,
@@ -14,7 +14,7 @@ module TeamCowboy
 
     def save_event_rsvp(team_id:, event_id:, status:, add_male: nil, add_femail: nil, comments: nil)
       params = { 
-        userToken:  TeamCowboy.user_token,
+        userToken:  self.user_token,
         teamId:     team_id,
         eventId:    event_id,
         status:     status, # yes|maybe|available|no|noresponse

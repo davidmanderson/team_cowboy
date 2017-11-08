@@ -14,18 +14,13 @@ module TeamCowboy
         send("#{key}=", options[key])
       end
     end
-    
-    def consume(request, options = {})
-      unless options[:validate] == false
-        if !validate(request)
-          puts "Incorrect signature"
-          return
-        end
-      end
-      
-      result = Hashie::Mash.new(request.params)
-      result[result.keys.first] unless result.blank?
+
+    def as(user_token)
+      tc = TeamCowboy.new
+      tc.user_token = user_token
+      tc
     end
+    
     
     Dir[File.expand_path('../client/*.rb', __FILE__)].each{|f| require f}
     

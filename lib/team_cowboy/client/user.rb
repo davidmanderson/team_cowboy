@@ -1,9 +1,9 @@
 module TeamCowboy
   module User
     
-    def me
+    def user
       params = { 
-        userToken: TeamCowboy.user_token,
+        userToken: self.user_token,
       }
 
       get("User_Get", params)
@@ -11,7 +11,7 @@ module TeamCowboy
 
     def teams
       params = { 
-        userToken: TeamCowboy.user_token,
+        userToken: self.user_token,
       }
 
       get("User_GetTeams", params)
@@ -19,7 +19,7 @@ module TeamCowboy
 
     def events(team_id: nil, include_rsvp_info: nil, start_date: nil, end_date: nil)
       params = {
-        userToken:        TeamCowboy.user_token,
+        userToken:        self.user_token,
         teamId:           team_id,
         includeRSVPInfo:  include_rsvp_info,
         startDateTime:    start_date, # YYYY-MM-DD HH:MM:SS
@@ -30,7 +30,7 @@ module TeamCowboy
 
     def messages(team_id: nil, message_id: nil, offset: nil, quantity: nil, sort_by: nil, sort_direction: nil)
       params = {
-        userToken:      TeamCowboy.user_token,
+        userToken:      self.user_token,
         teamId:         team_id,
         messageId:      message_id,
         offset:         offset, 

@@ -3,7 +3,7 @@ module TeamCowboy
     
     def team(team_id)
       params = { 
-        userToken:  TeamCowboy.user_token,
+        userToken:  self.user_token,
         teamId:     team_id
       }
 
