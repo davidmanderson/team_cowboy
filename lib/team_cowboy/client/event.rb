@@ -9,7 +9,7 @@ module TeamCowboy
         includeRSVPInfo:  include_rsvp_info,
       }
 
-      get("Team_Get", params)
+      get("Event_Get", params)
     end
 
     def save_event_rsvp(team_id:, event_id:, status:, add_male: nil, add_femail: nil, comments: nil)
@@ -23,7 +23,7 @@ module TeamCowboy
         comments:   comments
       }
 
-      post("Team_Get", params)
+      post("Event_SaveRSVP", params)
     end
           
   end
