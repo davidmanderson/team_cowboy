@@ -12,6 +12,16 @@ module TeamCowboy
       get("Event_Get", params)
     end
 
+    def attendance(team_id:, event_id:)
+      params = { 
+        userToken:        self.user_token,
+        teamId:           team_id,
+        eventId:          event_id,
+      }
+
+      get("Event_GetAttendanceList", params)
+    end
+
     def save_event_rsvp(team_id:, event_id:, status:, add_male: nil, add_femail: nil, comments: nil)
       params = { 
         userToken:  self.user_token,
