@@ -76,11 +76,11 @@ module TeamCowboy
         
         request_array = []
         request_hash.keys.sort.each do |key|
-          request_array.push "#{key.downcase}=#{ERB::Util.url_encode(request_hash[key].to_s.downcase)}"
+          request_array.push "#{key.downcase}=#{ERB::Util.url_encode(request_hash[key].to_s).downcase}"
         end
         request_string = request_array.join('&')
         parts.push(request_string)
-
+        
         Digest::SHA1.hexdigest parts.join('|')
       end
 
