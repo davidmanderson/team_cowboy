@@ -6,7 +6,7 @@ module TeamCowboy
   module Configuration
 
     # An array of valid keys in the options hash when configuring
-    VALID_OPTIONS_KEYS = [:adapter, :endpoint, :limit, :user_agent, :request_options, :user_token].freeze
+    VALID_OPTIONS_KEYS = [:adapter, :endpoint, :limit, :retries, :request_options, :user_agent, :user_token].freeze
 
     # The adapter that will be used to connect if none is set
     #
@@ -21,6 +21,9 @@ module TeamCowboy
     
     # The default number of results to return from the API
     DEFAULT_LIMIT = nil
+
+    # The default number of retries for a request
+    DEFAULT_RETRIES = 3
     
     # The default request options for Faraday
     DEFAULT_REQUEST_OPTIONS = {
@@ -55,6 +58,7 @@ module TeamCowboy
       self.user_agent       = DEFAULT_USER_AGENT
       self.request_options  = DEFAULT_REQUEST_OPTIONS
       self.limit            = DEFAULT_LIMIT
+      self.retries          = DEFAULT_RETRIES
       self.user_token       = nil
     end
 

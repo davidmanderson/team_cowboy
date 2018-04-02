@@ -118,6 +118,7 @@ module TeamCowboy
         
         Faraday.new(config) do |builder|
           builder.request :url_encoded
+          builder.request :retry, max: Configuration::DEFAULT_RETRIES
           builder.adapter(adapter)
         end
       end
