@@ -53,7 +53,7 @@ module TeamCowboy
         begin 
           result = Hashie::Mash.new JSON.parse(response.body)
           result.success ? result.body : nil
-        rescue
+        rescue Exception => e
           nil
         end
       end
@@ -85,7 +85,8 @@ module TeamCowboy
       end
 
       def generate_nonce
-        rand(10 ** 9)
+        # generate a random 10 digit number
+        rand((10**(10 - 1))..(10**10))
       end
 
       def generate_timestamp
