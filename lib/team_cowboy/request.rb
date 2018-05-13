@@ -121,7 +121,7 @@ module TeamCowboy
         check_status = lambda { |response, exception| response.status == 500 ? true : false }
         Faraday.new(config) do |builder|
           builder.request :url_encoded
-          builder.request :retry, max: Configuration::DEFAULT_RETRIES, retry_statuses: [500], retry_if: check_status
+          builder.request :retry, max: Configuration::DEFAULT_RETRIES, retry_if: check_status
           builder.adapter(adapter)
         end
       end
