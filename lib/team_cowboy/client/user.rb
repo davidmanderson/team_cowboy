@@ -27,19 +27,6 @@ module TeamCowboy
       }
       get("User_GetTeamEvents", params)
     end
-
-    def messages(team_id: nil, message_id: nil, offset: nil, quantity: nil, sort_by: nil, sort_direction: nil)
-      params = {
-        userToken:      self.user_token,
-        teamId:         team_id,
-        messageId:      message_id,
-        offset:         offset, 
-        qty:            quantity,
-        sortBy:         sort_by, 
-        sortDirection:  sort_direction,
-      }
-      get("User_GetTeamEvents", params)
-    end
-          
+              
   end
 end

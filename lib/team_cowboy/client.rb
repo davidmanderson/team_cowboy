@@ -32,5 +32,6 @@ module TeamCowboy
     include User
     include Team
     include Event
+    include Message
   end
 end
