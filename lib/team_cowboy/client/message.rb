@@ -20,9 +20,9 @@ module TeamCowboy
         body:               body,
       }
       params[:messageId] = message_id if message_id
-      params[:isPinned] = is_pinned if is_pinned
-      params[:sendNotifications] = send_notifications if send_notifications
-      params[:allowComments] = allow_comments if allow_comments
+      params[:isPinned] = is_pinned unless is_pinned.nil?
+      params[:sendNotifications] = send_notifications unless send_notifications.nil?
+      params[:allowComments] = allow_comments unless allow_comments.nil?
 
       post("Message_Save", params)
     end
