@@ -24,8 +24,8 @@ module TeamCowboy
     
     # The default request options for Faraday
     DEFAULT_REQUEST_OPTIONS = {
-      :timeout => 5,
-      :open_timeout => 5
+      :timeout => 10,
+      :open_timeout => 10
     }
 
     # @private
