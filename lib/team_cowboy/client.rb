@@ -33,5 +33,6 @@ module TeamCowboy
     include Team
     include Event
     include Message
+    include Test
   end
 end
